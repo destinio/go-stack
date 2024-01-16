@@ -7,3 +7,9 @@ fiber:
 
 run:
 	@go run main.go
+
+tw-b:
+	@npx tailwindcss -i ./styles/tailwind.css -o ./public/main.css
+
+tw-w:
+	@npx tailwindcss -i ./styles/tailwind.css -o ./public/main.css --watch
