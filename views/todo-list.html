@@ -1,0 +1,7 @@
+<form hx-post="/new" hx-target="#todo-list" hx-swap="beforebegin">
+  <input type="text" name="title" />
+  <button type="submit">save</button>
+</form>
+<div id="todo-list" class="flex flex-col gap-2">
+  {{range .Todos}} {{template "partials/todo-list-item" .}} {{end}}
+</div>
