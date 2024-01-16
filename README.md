@@ -6,14 +6,16 @@
 - https://gofiber.io/
 - https://github.com/gofiber/fiber 
 
-**Install**
-`go get -u github.com/gofiber/fiber/v3`
+
+```bash
+go get -u github.com/gofiber/fiber/v2`
+```
 
 ```go
 package main
 
 import (
-	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v2"
 )
 
 func main() {
@@ -22,7 +24,7 @@ func main() {
 	// static files
 	app.Static("/", "./public")
 
-	app.Get("/", func(c fiber.Ctx) error {
+	app.Get("/", func(c *fiber.Ctx) error {
 		c.Set("Content-Type", "text/html")
 		return c.SendString("<h1>Hello, World!</h1>")
 	})

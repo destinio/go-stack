@@ -1,17 +1,23 @@
 package main
 
 import (
+	"github.com/destinio/go-stack/handlers"
+	"github.com/destinio/go-stack/models"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
+
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
-type Todo struct {
-	Id        int
-	Title     string
-	Completed bool
-}
-
 func main() {
+	db, err := gorm.Open(sqlite.Open("todos.db"), &gorm.Config{})
+	if err != nil {
+		panic("failed to connect database")
+	}
+
+	db.AutoMigrate(&models.Todo{})
+
 	engine := html.New("./views", ".html")
 	// Create new Fiber instance
 	app := fiber.New(fiber.Config{
@@ -22,21 +28,10 @@ func main() {
 	// static files
 	app.Static("/", "./public")
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.Render("index", fiber.Map{
-			"Title": "Todos!",
-			"Todos": []Todo{
-				{1, "a todo", false},
-				{2, "Crh blaheate a todo list", false},
-				{3, "and this one", false},
-			},
-		})
-	})
+	app.Get("/", handlers.IndexHandler)
+	app.Get("/todos", handlers.TodosListHandler)
 
-	app.Get("/todos", func(c *fiber.Ctx) error {
-		c.Set("Content-Type", "text/html")
-		return c.SendString("<h1>Hello, World!</h1>")
-	})
+	app.Post("/new", handlers.NewTodoHandler)
 
-	app.Listen(":1337")
+	app.Listen("localhost:1337")
 }
